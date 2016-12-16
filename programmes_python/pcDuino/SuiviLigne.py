@@ -1,7 +1,17 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from pyduino_pcduino import * # importe les fonctions Arduino pour Python
+##################################################################################
+# Programme de contrôle du robot T-Quad avec 2 roues classiques et une boule
+# omnidirectionnelle, disponible à l'adresse:
+# http://boutique.3sigma.fr/12-robots
+#
+# Auteur: 3Sigma
+# Version 1.1.1 - 16/12/2016
+##################################################################################
+
+# Importe les fonctions Arduino pour Python
+from pyduino_pcduino import *
 
 # Imports pour la communication i2c avec l'Arduino Mega
 from mega import Mega
@@ -39,14 +49,16 @@ codeurArriereGaucheDeltaPosPrec = 0
 
 # Variables nécessaires à la commande des moteurs
 # Consignes de tension
-vref = 3.
+vref = 0.
 vrefArriereDroit = 0.
 vrefArriereGauche = 0.
 
 # Variables pour le suivi de ligne
-L1 = 0
-L2 = 0
-L3 = 0
+L1 = 0.
+L2 = 0.
+L3 = 0.
+seuil = 2.
+
 
 # Tension effectivement appliquée
 commandeArriereDroit = 0.
@@ -111,7 +123,7 @@ def CalculVitesse():
         vrefArriereDroit, vrefArriereGauche, \
         codeurArriereDroitDeltaPosPrec, codeurArriereGaucheDeltaPosPrec, \
         idecimLectureTension, decimLectureTension, decimErreurLectureTension, tensionAlim, \
-        L1, L2, L3
+        L1, L2, L3, seuil
     
     tdebut = time.time()
         
@@ -138,15 +150,15 @@ def CalculVitesse():
     
     # Lecture des capteurs de suivi de ligne
     try:
-        L1 = mega.line_read(1)
-        L2 = mega.line_read(2)
-        L3 = mega.line_read(3)
+        # Passage des millivolts aux volts
+        L1 = mega.line_read(1) / 1000.
+        L2 = mega.line_read(2) / 1000.
+        L3 = mega.line_read(3) / 1000.
     except:
         print("Erreur lecture capteurs ligne")
 
 
     # On compare par rapport à un seuil pour savoir si le capteur voit la ligne ou non
-    seuil = 2000
     surLigne1 = False
     surLigne2 = False
     surLigne3 = False
@@ -266,7 +278,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
     
 
     def on_message(self, message):
-        global vref, vrefArriereDroit, vrefArriereGauche, timeLastReceived, timedOut
+        global vref, seuil, vrefArriereDroit, vrefArriereGauche, timeLastReceived, timedOut
         
         jsonMessage = json.loads(message)
         
@@ -274,8 +286,11 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         timeLastReceived = time.time()
         timedOut = False;
         
-        # if jsonMessage.get('vref') != None:
-            # vref = float(jsonMessage.get('vref'))
+        if jsonMessage.get('vref') != None:
+            vref = float(jsonMessage.get('vref'))
+        if jsonMessage.get('seuil') != None:
+            seuil = float(jsonMessage.get('seuil'))
+        
         
         # Application de la consigne sur les moteurs arrière
         vrefArriereDroit = vref
@@ -295,23 +310,24 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         vrefArriereGauche = 0.
 
     def sendToSocket(self):
-        global socketOK, omegaArriereDroit, omegaArriereGauche, L1, L2, L3
+        global socketOK, omegaArriereDroit, omegaArriereGauche, L1, L2, L3, seuil
         
         tcourant = time.time() - T0
         aEnvoyer = json.dumps({'Temps':("%.2f" % tcourant), \
                                 'Consigne':("%.2f" % vref), \
                                 'omegaArriereDroit':("%.2f" % omegaArriereDroit), \
                                 'omegaArriereGauche':("%.2f" % omegaArriereGauche), \
-                                'L1':("%.1f" % (L1 / 1000.)), \
-                                'L2':("%.1f" % (L2 / 1000.)), \
-                                'L3':("%.1f" % (L3 / 1000.)), \
+                                'L1':("%.1f" % L1), \
+                                'L2':("%.1f" % L2), \
+                                'L3':("%.1f" % L3), \
+                                'seuil_lu':("%.1f" % seuil), \
                                 'Raw':("%.2f" % tcourant) \
                                 + "," + ("%.2f" % vref) \
                                 + "," + ("%.2f" % omegaArriereDroit) \
                                 + "," + ("%.2f" % omegaArriereGauche) \
-                                + "," + ("%.1f" % (L1 / 1000.)) \
-                                + "," + ("%.1f" % (L2 / 1000.)) \
-                                + "," + ("%.1f" % (L3 / 1000.)) \
+                                + "," + ("%.1f" % L1) \
+                                + "," + ("%.1f" % L2) \
+                                + "," + ("%.1f" % L3) \
                                 })
         if socketOK:
             try:
