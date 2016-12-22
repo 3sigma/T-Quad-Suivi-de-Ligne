@@ -33,6 +33,135 @@
 			]
 		},
 		{
+			"title": "Capteurs de suivi de ligne",
+			"width": 1,
+			"row": {
+				"3": 1
+			},
+			"col": {
+				"3": 2
+			},
+			"col_width": "2",
+			"widgets": [
+				{
+					"type": "plot",
+					"settings": {
+						"xaxis": "datasource_column",
+						"time": "datasources[\"ws\"][\"Temps\"]",
+						"time_window": 10,
+						"value": [
+							"datasources[\"ws\"][\"L1\"]",
+							"datasources[\"ws\"][\"L2\"]",
+							"datasources[\"ws\"][\"L3\"]",
+							"datasources[\"ws\"][\"seuil_lu\"]"
+						],
+						"y_axis_min_range": "0,5",
+						"include_legend": true,
+						"legendStr": "L1,L2,L3",
+						"height": 4,
+						"pausable": true
+					}
+				}
+			]
+		},
+		{
+			"title": "Seuil de détection",
+			"width": 1,
+			"row": {
+				"3": 5,
+				"4": 5
+			},
+			"col": {
+				"3": 1,
+				"4": 1
+			},
+			"col_width": 1,
+			"widgets": [
+				{
+					"type": "slider",
+					"settings": {
+						"datasourcename": "ws",
+						"variable": "datasources[\"ws\"][\"seuil\"]",
+						"initialvalue": 2,
+						"min": 0,
+						"max": 5,
+						"resolution": 1,
+						"resetvalue": 2,
+						"resetcaption": "Réinitialisation"
+					}
+				}
+			]
+		},
+		{
+			"title": "Etat capteur 1",
+			"width": 1,
+			"row": {
+				"3": 11,
+				"4": 11
+			},
+			"col": {
+				"3": 1,
+				"4": 1
+			},
+			"col_width": 1,
+			"widgets": [
+				{
+					"type": "indicator",
+					"settings": {
+						"value": "datasources[\"ws\"][\"L1\"]<datasources[\"ws\"][\"seuil_lu\"]",
+						"on_text": "Capteur 1 sur ligne",
+						"off_text": "Capteur 1 hors ligne"
+					}
+				}
+			]
+		},
+		{
+			"title": "Etat capteur 2",
+			"width": 1,
+			"row": {
+				"3": 11,
+				"4": 11
+			},
+			"col": {
+				"3": 2,
+				"4": 2
+			},
+			"col_width": 1,
+			"widgets": [
+				{
+					"type": "indicator",
+					"settings": {
+						"value": "datasources[\"ws\"][\"L2\"]<datasources[\"ws\"][\"seuil_lu\"]",
+						"on_text": "Capteur 2 sur ligne",
+						"off_text": "Capteur 2 hors ligne"
+					}
+				}
+			]
+		},
+		{
+			"title": "Etat capteur 3",
+			"width": 1,
+			"row": {
+				"3": 11,
+				"4": 11
+			},
+			"col": {
+				"3": 3,
+				"4": 3
+			},
+			"col_width": 1,
+			"widgets": [
+				{
+					"type": "indicator",
+					"settings": {
+						"value": "datasources[\"ws\"][\"L3\"]<datasources[\"ws\"][\"seuil_lu\"]",
+						"on_text": "Capteur 3 sur ligne",
+						"off_text": "Capteur 3 hors ligne"
+					}
+				}
+			]
+		},
+		{
 			"title": "Tension des moteurs",
 			"width": 1,
 			"row": {
@@ -62,157 +191,15 @@
 			]
 		},
 		{
-			"title": "Moniteur série",
-			"width": 1,
-			"row": {
-				"3": 21,
-				"4": 23
-			},
-			"col": {
-				"3": 1,
-				"4": 1
-			},
-			"col_width": "1",
-			"widgets": [
-				{
-					"type": "textarea",
-					"settings": {
-						"nblines_window": "10",
-						"value": [
-							"datasources[\"ws\"][\"Raw\"]"
-						]
-					}
-				}
-			]
-		},
-		{
-			"title": "Capteurs de suivi de ligne",
-			"width": 1,
-			"row": {
-				"3": 1
-			},
-			"col": {
-				"3": 2
-			},
-			"col_width": "2",
-			"widgets": [
-				{
-					"type": "plot",
-					"settings": {
-						"xaxis": "datasource_column",
-						"time": "datasources[\"ws\"][\"Temps\"]",
-						"time_window": 10,
-						"value": [
-							"datasources[\"ws\"][\"L1\"]",
-							"datasources[\"ws\"][\"L2\"]",
-							"datasources[\"ws\"][\"L3\"]",
-							"datasources[\"ws\"][\"seuil_lu\"]"
-						],
-						"y_axis_min_range": "0,5",
-						"include_legend": true,
-						"legendStr": "L1,L2,L3",
-						"height": 4
-					}
-				}
-			]
-		},
-		{
-			"title": "Seuil de détection",
-			"width": 1,
-			"row": {
-				"3": 5
-			},
-			"col": {
-				"3": 1
-			},
-			"col_width": 1,
-			"widgets": [
-				{
-					"type": "slider",
-					"settings": {
-						"datasourcename": "ws",
-						"variable": "datasources[\"ws\"][\"seuil\"]",
-						"initialvalue": 2,
-						"min": 0,
-						"max": 5,
-						"resolution": 1,
-						"resetvalue": 2,
-						"resetcaption": "Réinitialisation"
-					}
-				}
-			]
-		},
-		{
-			"title": "Etat capteur 1",
-			"width": 1,
-			"row": {
-				"3": 11
-			},
-			"col": {
-				"3": 1
-			},
-			"col_width": 1,
-			"widgets": [
-				{
-					"type": "indicator",
-					"settings": {
-						"value": "datasources[\"ws\"][\"L1\"]<datasources[\"ws\"][\"seuil_lu\"]",
-						"on_text": "Capteur 1 sur ligne",
-						"off_text": "Capteur 1 hors ligne"
-					}
-				}
-			]
-		},
-		{
-			"title": "Etat capteur 2",
-			"width": 1,
-			"row": {
-				"3": 11
-			},
-			"col": {
-				"3": 2
-			},
-			"col_width": 1,
-			"widgets": [
-				{
-					"type": "indicator",
-					"settings": {
-						"value": "datasources[\"ws\"][\"L2\"]<datasources[\"ws\"][\"seuil_lu\"]",
-						"on_text": "Capteur 2 sur ligne",
-						"off_text": "Capteur 2 hors ligne"
-					}
-				}
-			]
-		},
-		{
-			"title": "Etat capteur 3",
-			"width": 1,
-			"row": {
-				"3": 11
-			},
-			"col": {
-				"3": 3
-			},
-			"col_width": 1,
-			"widgets": [
-				{
-					"type": "indicator",
-					"settings": {
-						"value": "datasources[\"ws\"][\"L3\"]<datasources[\"ws\"][\"seuil_lu\"]",
-						"on_text": "Capteur 3 sur ligne",
-						"off_text": "Capteur 3 hors ligne"
-					}
-				}
-			]
-		},
-		{
 			"title": "Vitesses",
 			"width": 1,
 			"row": {
-				"3": 15
+				"3": 15,
+				"4": 15
 			},
 			"col": {
-				"3": 2
+				"3": 2,
+				"4": 2
 			},
 			"col_width": "2",
 			"widgets": [
@@ -229,7 +216,34 @@
 						"y_axis_min_range": "-1,1",
 						"include_legend": true,
 						"legendStr": "omega arrière droit,omega arrière gauche",
-						"height": 4
+						"height": 4,
+						"pausable": true
+					}
+				}
+			]
+		},
+		{
+			"title": "Moniteur série",
+			"width": 1,
+			"row": {
+				"3": 21,
+				"4": 23,
+				"5": 23
+			},
+			"col": {
+				"3": 1,
+				"4": 1,
+				"5": 1
+			},
+			"col_width": "1",
+			"widgets": [
+				{
+					"type": "textarea",
+					"settings": {
+						"nblines_window": "10",
+						"value": [
+							"datasources[\"ws\"][\"Raw\"]"
+						]
 					}
 				}
 			]
