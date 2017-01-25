@@ -57,7 +57,7 @@
 						],
 						"y_axis_min_range": "0,5",
 						"include_legend": true,
-						"legendStr": "L1,L2,L3",
+						"legendStr": "L1,L2,L3,seuil",
 						"height": 4,
 						"pausable": true
 					}
@@ -80,7 +80,6 @@
 				{
 					"type": "slider",
 					"settings": {
-						"datasourcename": "ws",
 						"variable": "datasources[\"ws\"][\"seuil\"]",
 						"initialvalue": 2,
 						"min": 0,
@@ -178,7 +177,6 @@
 					"type": "slider",
 					"settings": {
 						"title": "",
-						"datasourcename": "ws",
 						"variable": "datasources[\"ws\"][\"vref\"]",
 						"initialvalue": 0,
 						"min": 0,
