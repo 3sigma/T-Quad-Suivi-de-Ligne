@@ -7,16 +7,13 @@
 # http://boutique.3sigma.fr/12-robots
 #
 # Auteur: 3Sigma
-# Version 1.1.1 - 16/12/2016
+# Version 1.1.2 - 30/01/2017
 ##################################################################################
 
 # Importe les fonctions Arduino pour Python
-from pyduino_pcduino import *
+from pyduino import *
 
-# Imports pour la communication i2c avec l'Arduino Mega
-from mega import Mega
-mega = Mega()
-
+# Imports Généraux
 import time, sched
 import os
 import threading
@@ -37,6 +34,15 @@ import tornado.web
 import tornado.websocket
 import tornado.template
 
+# Nom de l'hostname (utilisé ensuite pour savoir sur quel système
+# tourne ce programme)
+hostname = socket.gethostname()
+
+# Imports pour la communication i2c avec l'Arduino Mega
+from mega import Mega
+mega = Mega(hostname = hostname)
+
+# Moteurs
 Nmoy = 1
 
 omegaArriereDroit = 0.
